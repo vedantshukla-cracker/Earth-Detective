@@ -1,0 +1,1938 @@
+````html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earth Detective</title>
+
+<style>
+:root{
+  --bg:#07120d;
+  --card:#102019;
+  --card2:#14271e;
+  --green:#63e58a;
+  --green2:#b2ffc5;
+  --text:#f2fff5;
+  --muted:#9bb0a2;
+  --border:rgba(255,255,255,.10);
+  --danger:#ff7777;
+  --gold:#ffd166;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,#163b28 0,transparent 30%),
+    radial-gradient(circle at 90% 20%,#183524 0,transparent 25%),
+    linear-gradient(135deg,#06100b,#0a1811);
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:min(1050px,92%);
+  margin:auto;
+}
+
+/* NAV */
+
+nav{
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:20px;
+  font-weight:800;
+}
+
+.logo-icon{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  background:#183a28;
+  border:1px solid #28563b;
+  border-radius:12px;
+}
+
+.status{
+  color:var(--muted);
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+/* SCREENS */
+
+.screen{
+  display:none;
+  min-height:calc(100vh - 80px);
+  padding:35px 0 70px;
+}
+
+.screen.active{
+  display:block;
+  animation:appear .4s ease;
+}
+
+@keyframes appear{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* HOME */
+
+.hero{
+  text-align:center;
+  max-width:760px;
+  margin:50px auto 40px;
+}
+
+.badge{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:50px;
+  background:#102c1d;
+  border:1px solid #27583b;
+  color:var(--green2);
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+h1{
+  font-size:clamp(45px,8vw,78px);
+  line-height:.95;
+  letter-spacing:-4px;
+}
+
+.gradient{
+  color:var(--green2);
+}
+
+.hero p{
+  max-width:600px;
+  margin:22px auto;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.card{
+  background:rgba(16,32,25,.85);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:28px;
+  backdrop-filter:blur(15px);
+  box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.config{
+  max-width:850px;
+  margin:auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+label{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+
+select,
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#09150e;
+  color:var(--text);
+  outline:none;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.themes{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:10px;
+}
+
+.theme{
+  padding:14px 8px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#0b1810;
+  color:var(--muted);
+}
+
+.theme.selected{
+  background:#163925;
+  border-color:var(--green);
+  color:var(--green2);
+}
+
+.primary{
+  width:100%;
+  padding:15px;
+  margin-top:22px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(100deg,#58d77d,#a5f6b9);
+  color:#06100a;
+  font-weight:900;
+  transition:.2s;
+}
+
+.primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(99,229,138,.2);
+}
+
+.secondary{
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#102019;
+  color:var(--text);
+}
+
+.secondary:hover{
+  background:#172c21;
+}
+
+/* SETTINGS */
+
+details{
+  margin-top:20px;
+}
+
+summary{
+  cursor:pointer;
+  color:var(--green2);
+  font-size:13px;
+  font-weight:700;
+}
+
+.settings{
+  margin-top:15px;
+  display:grid;
+  gap:12px;
+}
+
+.ai-status{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* MISSION */
+
+.mission-top{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+  margin-bottom:22px;
+}
+
+.case{
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.mission-title{
+  font-size:clamp(32px,5vw,52px);
+  letter-spacing:-2px;
+  margin:7px 0 10px;
+}
+
+.description{
+  color:var(--muted);
+  line-height:1.6;
+  max-width:700px;
+}
+
+.timer{
+  min-width:110px;
+  padding:14px;
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#09150e;
+}
+
+.timer strong{
+  display:block;
+  font-size:25px;
+}
+
+.timer small{
+  color:var(--muted);
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:8px;
+}
+
+.progress{
+  height:7px;
+  background:#07100b;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  background:var(--green);
+  transition:.4s;
+}
+
+.clue-label{
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-top:28px;
+}
+
+.clue-title{
+  font-size:30px;
+  margin:8px 0;
+}
+
+.clue-text{
+  color:#c7d7cc;
+  line-height:1.7;
+  margin-bottom:18px;
+}
+
+.observation{
+  display:none;
+  margin-top:18px;
+}
+
+.observation.show{
+  display:block;
+  animation:appear .3s ease;
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.buttons>*{
+  flex:1;
+}
+
+.ai-box{
+  display:none;
+  margin-top:18px;
+  padding:17px;
+  border-radius:14px;
+  background:#102b1b;
+  border:1px solid #245438;
+  color:#d8f3df;
+  line-height:1.6;
+}
+
+.ai-box.show{
+  display:block;
+}
+
+.ai-label{
+  color:var(--green);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+/* COMPLETE */
+
+.complete{
+  text-align:center;
+  max-width:700px;
+  margin:70px auto;
+}
+
+.complete-icon{
+  font-size:65px;
+  animation:float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.complete h2{
+  font-size:48px;
+  margin:12px 0;
+}
+
+.score{
+  color:var(--green);
+  font-size:65px;
+  font-weight:900;
+}
+
+.report{
+  text-align:left;
+  margin-top:25px;
+  white-space:pre-line;
+  line-height:1.7;
+  color:#c7d7cc;
+}
+
+/* HISTORY */
+
+.history{
+  max-width:850px;
+  margin:30px auto;
+}
+
+.history h2{
+  margin-bottom:15px;
+}
+
+.history-item{
+  padding:16px;
+  border-radius:14px;
+  background:#0e1d15;
+  border:1px solid var(--border);
+  margin-bottom:10px;
+}
+
+.history-item strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.history-item small{
+  color:var(--muted);
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .themes{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .mission-top{
+    flex-direction:column;
+  }
+
+  .timer{
+    width:100%;
+  }
+
+  .buttons{
+    flex-direction:column;
+  }
+
+  h1{
+    letter-spacing:-2px;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+<nav>
+
+  <div class="logo">
+    <div class="logo-icon">🔎</div>
+    Earth Detective
+  </div>
+
+  <div class="status">
+    <span class="dot"></span>
+    <span id="statusText">Offline-first</span>
+  </div>
+
+</nav>
+
+
+<!-- ================= HOME ================= -->
+
+<section id="home" class="screen active">
+
+  <div class="hero">
+
+    <div class="badge">
+      🌍 TOUCH GRASS CHALLENGE
+    </div>
+
+    <h1>
+      Investigate the<br>
+      <span class="gradient">real world.</span>
+    </h1>
+
+    <p>
+      An AI-powered outdoor mystery game.
+      Your clues are outside your screen.
+      Your mission is to explore, observe and solve.
+    </p>
+
+  </div>
+
+
+  <div class="card config">
+
+    <div class="grid">
+
+      <div>
+        <label>Time</label>
+
+        <select id="time">
+          <option value="15">15 minutes</option>
+          <option value="30" selected>30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="60">60 minutes</option>
+        </select>
+
+      </div>
+
+
+      <div>
+        <label>Difficulty</label>
+
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+      </div>
+
+
+      <div>
+        <label>Environment</label>
+
+        <select id="environment">
+          <option value="any">Anywhere</option>
+          <option value="park">Park</option>
+          <option value="urban">Urban</option>
+          <option value="campus">Campus</option>
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div style="margin-top:22px">
+
+      <label>Investigation theme</label>
+
+      <div class="themes">
+
+        <button class="theme selected" data-theme="nature">
+          🌿 Nature
+        </button>
+
+        <button class="theme" data-theme="water">
+          💧 Water
+        </button>
+
+        <button class="theme" data-theme="urban">
+          🏙️ Urban
+        </button>
+
+        <button class="theme" data-theme="sustainability">
+          ♻️ Sustainability
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <button id="start" class="primary">
+      START INVESTIGATION →
+    </button>
+
+
+    <!-- AI SETTINGS -->
+
+    <details>
+
+      <summary>⚙ Local AI Settings</summary>
+
+      <div class="settings">
+
+        <div>
+          <label>Ollama URL</label>
+
+          <input
+            id="ollamaUrl"
+            value="http://localhost:11434"
+          >
+
+        </div>
+
+
+        <div>
+          <label>Model</label>
+
+          <input
+            id="model"
+            value="llama3.2"
+          >
+
+        </div>
+
+
+        <div class="ai-status" id="aiStatus">
+          Built-in AI simulation active.
+          Connect Ollama to use a real local open-weight model.
+        </div>
+
+      </div>
+
+    </details>
+
+  </div>
+
+
+  <div class="history">
+
+    <h2>Previous investigations</h2>
+
+    <div id="historyList"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= MISSION ================= -->
+
+<section id="mission" class="screen">
+
+  <div class="mission-top">
+
+    <div>
+
+      <div class="case" id="caseNumber">
+        CASE #001
+      </div>
+
+      <div class="mission-title" id="missionTitle">
+        The Hidden Green
+      </div>
+
+      <div class="description" id="missionDescription"></div>
+
+    </div>
+
+
+    <div class="timer">
+
+      <strong id="timer">
+        30:00
+      </strong>
+
+      <small>remaining</small>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="progress-info">
+
+      <span id="progressText">
+        Clue 1 of 5
+      </span>
+
+      <span id="scoreText">
+        0 points
+      </span>
+
+    </div>
+
+
+    <div class="progress">
+
+      <div class="progress-bar" id="progress"></div>
+
+    </div>
+
+
+    <div class="clue-label" id="clueLabel">
+      CLUE 01
+    </div>
+
+
+    <div class="clue-title" id="clueTitle"></div>
+
+
+    <div class="clue-text" id="clueText"></div>
+
+
+    <button class="secondary" id="hint">
+      💡 Give me a hint
+    </button>
+
+
+    <div class="ai-box" id="aiBox">
+
+      <div class="ai-label">
+        AI DETECTIVE
+      </div>
+
+      <div id="aiText"></div>
+
+    </div>
+
+
+    <div class="observation" id="observation">
+
+      <label style="margin-top:20px">
+        What did you discover?
+      </label>
+
+      <textarea
+        id="observationInput"
+        placeholder="Describe what you observed..."
+      ></textarea>
+
+
+      <div class="buttons">
+
+        <button class="primary" id="submit">
+          SUBMIT DISCOVERY
+        </button>
+
+        <button class="secondary" id="skip">
+          Skip
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="primary"
+      id="found"
+    >
+      ✓ I FOUND THE CLUE
+    </button>
+
+  </div>
+
+
+  <button
+    class="secondary"
+    id="end"
+    style="margin-top:15px"
+  >
+    End investigation
+  </button>
+
+</section>
+
+
+<!-- ================= COMPLETE ================= -->
+
+<section id="complete" class="screen">
+
+  <div class="complete">
+
+    <div class="complete-icon">
+      🌎
+    </div>
+
+    <div class="case">
+      INVESTIGATION COMPLETE
+    </div>
+
+    <h2>Case Solved</h2>
+
+    <div class="score" id="finalScore">
+      0
+    </div>
+
+    <p style="color:var(--muted)">
+      points
+    </p>
+
+
+    <div class="card report">
+
+      <div class="ai-label">
+        FIELD REPORT
+      </div>
+
+      <div id="report"></div>
+
+    </div>
+
+
+    <button
+      class="primary"
+      id="newCase"
+    >
+      START ANOTHER CASE
+    </button>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   EARTH DETECTIVE
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+
+/* ---------- GAME STATE ---------- */
+
+let state = {
+
+  theme:"nature",
+
+  time:30,
+
+  difficulty:"medium",
+
+  environment:"any",
+
+  mission:null,
+
+  clue:0,
+
+  score:0,
+
+  seconds:0,
+
+  interval:null,
+
+  observations:[],
+
+  caseNumber:0
+
+};
+
+
+/* =========================================================
+   MISSIONS
+   ========================================================= */
+
+const missions = {
+
+nature:{
+
+title:"The Hidden Green",
+
+description:
+"Nature is hiding in plain sight. Discover signs of life that people normally walk past without noticing.",
+
+clues:[
+
+{
+title:"Find something alive",
+text:"Find a living plant, tree, insect, bird or other organism.",
+hint:"Look near paths, walls, grass, cracks and places people usually ignore."
+},
+
+{
+title:"Find evidence of an animal",
+text:"Find evidence that an animal has been here without necessarily seeing it.",
+hint:"Look for feathers, nests, webs, holes, tracks or damaged leaves."
+},
+
+{
+title:"Find something changing",
+text:"Find something in nature that is visibly changing over time.",
+hint:"Look for growth, decay, flowering, weathering or seasonal change."
+},
+
+{
+title:"Find a tiny ecosystem",
+text:"Find a small area where several forms of life interact.",
+hint:"Look under trees, around plants, near water or beneath fallen leaves."
+},
+
+{
+title:"Your hidden discovery",
+text:"Find one natural detail you normally would have walked past.",
+hint:"Stop for one minute and simply observe your surroundings."
+}
+
+]
+
+},
+
+
+water:{
+
+title:"The Disappearing Water",
+
+description:
+"Investigate how water moves through your surroundings and reconstruct its journey.",
+
+clues:[
+
+{
+title:"Find a water pathway",
+text:"Find somewhere rainwater could naturally move.",
+hint:"Look at slopes, roads, drains, gutters and low areas."
+},
+
+{
+title:"Find where water collects",
+text:"Find a place where water would probably collect after rain.",
+hint:"Look for low points or surfaces that prevent water from entering the ground."
+},
+
+{
+title:"Find water helping nature",
+text:"Find evidence of water affecting plants or other living things.",
+hint:"Look for damp soil, vegetation near drains or water sources."
+},
+
+{
+title:"Find an obstacle",
+text:"Find something humans built that changes how water moves.",
+hint:"Concrete, roads, walls and drainage systems are useful places to investigate."
+},
+
+{
+title:"Solve the water mystery",
+text:"Choose one location and mentally trace where rainwater would travel from there.",
+hint:"Follow gravity. Water generally moves toward lower ground."
+}
+
+]
+
+},
+
+
+urban:{
+
+title:"The Invisible City",
+
+description:
+"Your neighborhood contains systems you normally ignore. Investigate the hidden infrastructure around you.",
+
+clues:[
+
+{
+title:"Find a human system",
+text:"Find infrastructure that helps the city function.",
+hint:"Look for electricity, water, transport, waste or communication systems."
+},
+
+{
+title:"Find something designed",
+text:"Find an object designed to influence human behavior.",
+hint:"Look at signs, crossings, benches, barriers and paths."
+},
+
+{
+title:"Find an unintended use",
+text:"Find a place being used differently from what it was probably designed for.",
+hint:"Observe how people actually use the space."
+},
+
+{
+title:"Nature versus infrastructure",
+text:"Find a place where nature interacts with something humans built.",
+hint:"Look for plants, water or weather affecting roads and buildings."
+},
+
+{
+title:"Find the overlooked",
+text:"Find something most people probably don't notice.",
+hint:"Look upward, downward and behind objects."
+}
+
+]
+
+},
+
+
+sustainability:{
+
+title:"The Resource Hunt",
+
+description:
+"Investigate how resources are used, wasted and reused around you.",
+
+clues:[
+
+{
+title:"Find something reusable",
+text:"Find something being reused instead of thrown away.",
+hint:"Look around homes, shops, gardens and public areas."
+},
+
+{
+title:"Find wasted resources",
+text:"Find one example of a resource being unnecessarily wasted.",
+hint:"Think about water, electricity, food, paper or materials."
+},
+
+{
+title:"Find a natural solution",
+text:"Find something nature is doing without machines.",
+hint:"Think about shade, cooling, decomposition, plants and water filtration."
+},
+
+{
+title:"Find a problem",
+text:"Identify one small environmental problem around you.",
+hint:"Look for litter, unnecessary concrete, waste or pollution."
+},
+
+{
+title:"Find an opportunity",
+text:"Identify one realistic improvement that could make the area more sustainable.",
+hint:"Choose something small enough for one person to start."
+}
+
+]
+
+}
+
+};
+
+
+/* =========================================================
+   SCREEN SWITCH
+   ========================================================= */
+
+function showScreen(id){
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(s=>s.classList.remove("active"));
+
+  $(id).classList.add("active");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================================
+   THEME BUTTONS
+   ========================================================= */
+
+document
+.querySelectorAll(".theme")
+.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    document
+      .querySelectorAll(".theme")
+      .forEach(b=>b.classList.remove("selected"));
+
+    button.classList.add("selected");
+
+    state.theme=button.dataset.theme;
+
+  });
+
+});
+
+
+/* =========================================================
+   START GAME
+   ========================================================= */
+
+$("start").addEventListener("click",async()=>{
+
+  state.time=Number($("time").value);
+
+  state.difficulty=$("difficulty").value;
+
+  state.environment=$("environment").value;
+
+  state.clue=0;
+
+  state.score=0;
+
+  state.observations=[];
+
+  state.caseNumber=
+    Number(
+      localStorage.getItem("earthCase")||0
+    )+1;
+
+  localStorage.setItem(
+    "earthCase",
+    state.caseNumber
+  );
+
+
+  /*
+   First use the built-in mission.
+   Then attempt local AI.
+  */
+
+  state.mission={
+    ...missions[state.theme],
+    clues:[
+      ...missions[state.theme].clues
+    ]
+  };
+
+
+  loadMission();
+
+  startTimer();
+
+  showScreen("mission");
+
+
+  /* Try AI after UI is already visible */
+
+  const aiMission=
+    await generateMissionWithAI();
+
+  if(aiMission){
+
+    state.mission=aiMission;
+
+    loadMission();
+
+  }
+
+});
+
+
+/* =========================================================
+   LOAD MISSION
+   ========================================================= */
+
+function loadMission(){
+
+  $("caseNumber").textContent=
+    "CASE #"+
+    String(state.caseNumber).padStart(3,"0");
+
+  $("missionTitle").textContent=
+    state.mission.title;
+
+  $("missionDescription").textContent=
+    state.mission.description;
+
+  loadClue();
+
+}
+
+
+/* =========================================================
+   LOAD CLUE
+   ========================================================= */
+
+function loadClue(){
+
+  const c=
+    state.mission.clues[state.clue];
+
+
+  $("clueLabel").textContent=
+    "CLUE "+
+    String(state.clue+1).padStart(2,"0");
+
+  $("clueTitle").textContent=
+    c.title;
+
+  $("clueText").textContent=
+    c.text;
+
+
+  $("progressText").textContent=
+    `Clue ${state.clue+1} of ${state.mission.clues.length}`;
+
+  $("scoreText").textContent=
+    state.score+" points";
+
+
+  $("progress").style.width=
+    (state.clue/state.mission.clues.length*100)+"%";
+
+
+  $("observation").classList.remove("show");
+
+  $("aiBox").classList.remove("show");
+
+  $("observationInput").value="";
+
+}
+
+
+/* =========================================================
+   FOUND BUTTON
+   ========================================================= */
+
+$("found").addEventListener("click",()=>{
+
+  $("observation").classList.add("show");
+
+  $("observationInput").focus();
+
+});
+
+
+/* =========================================================
+   SUBMIT
+   ========================================================= */
+
+$("submit").addEventListener("click",async()=>{
+
+  const text=
+    $("observationInput").value.trim();
+
+  if(!text){
+
+    $("observationInput").focus();
+
+    return;
+
+  }
+
+
+  state.observations.push({
+    clue:state.clue+1,
+    text
+  });
+
+
+  let points=100;
+
+  if(state.difficulty==="easy")
+    points=75;
+
+  if(state.difficulty==="hard")
+    points=150;
+
+
+  state.score+=points;
+
+
+  const evaluation=
+    await evaluateWithAI(
+      state.mission.clues[state.clue],
+      text
+    );
+
+
+  if(evaluation){
+
+    $("aiText").textContent=evaluation;
+
+    $("aiBox").classList.add("show");
+
+    await sleep(1200);
+
+  }
+
+
+  nextClue();
+
+});
+
+
+/* =========================================================
+   NEXT CLUE
+   ========================================================= */
+
+function nextClue(){
+
+  state.clue++;
+
+  if(
+    state.clue>=
+    state.mission.clues.length
+  ){
+
+    finish();
+
+    return;
+
+  }
+
+  loadClue();
+
+}
+
+
+/* =========================================================
+   SKIP
+   ========================================================= */
+
+$("skip").addEventListener("click",()=>{
+
+  nextClue();
+
+});
+
+
+/* =========================================================
+   HINT
+   ========================================================= */
+
+$("hint").addEventListener("click",async()=>{
+
+  const c=
+    state.mission.clues[state.clue];
+
+
+  $("aiText").textContent=
+    "Thinking...";
+
+  $("aiBox").classList.add("show");
+
+
+  const ai=
+    await getAIHint(c);
+
+
+  $("aiText").textContent=
+    ai||c.hint;
+
+});
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function startTimer(){
+
+  clearInterval(state.interval);
+
+  state.seconds=state.time*60;
+
+  updateTimer();
+
+
+  state.interval=setInterval(()=>{
+
+    state.seconds--;
+
+    updateTimer();
+
+
+    if(state.seconds<=0){
+
+      clearInterval(state.interval);
+
+      finish();
+
+    }
+
+  },1000);
+
+}
+
+
+function updateTimer(){
+
+  const m=
+    Math.floor(state.seconds/60);
+
+  const s=
+    state.seconds%60;
+
+
+  $("timer").textContent=
+    String(m).padStart(2,"0")+
+    ":"+
+    String(s).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+async function finish(){
+
+  clearInterval(state.interval);
+
+  $("finalScore").textContent=
+    state.score;
+
+
+  showScreen("complete");
+
+
+  const aiReport=
+    await createAIReport();
+
+
+  $("report").textContent=
+    aiReport||createLocalReport();
+
+
+  saveHistory();
+
+}
+
+
+/* =========================================================
+   LOCAL REPORT
+   ========================================================= */
+
+function createLocalReport(){
+
+  return `
+You completed ${state.observations.length}
+of ${state.mission.clues.length} clues.
+
+Score: ${state.score} points.
+
+Your observations:
+
+${
+  state.observations.length
+  ?
+  state.observations
+  .map((x,i)=>`${i+1}. ${x.text}`)
+  .join("\n")
+  :
+  "No written observations."
+}
+
+The goal of Earth Detective is simple:
+use technology to help you notice the world,
+then put the screen away.
+`;
+
+}
+
+
+/* =========================================================
+   SAVE HISTORY
+   ========================================================= */
+
+function saveHistory(){
+
+  const history=
+    JSON.parse(
+      localStorage.getItem(
+        "earthHistory"
+      )||"[]"
+    );
+
+
+  history.unshift({
+
+    caseNumber:state.caseNumber,
+
+    title:state.mission.title,
+
+    score:state.score,
+
+    date:new Date().toLocaleString(),
+
+    observations:
+      state.observations.length
+
+  });
+
+
+  localStorage.setItem(
+    "earthHistory",
+    JSON.stringify(history.slice(0,10))
+  );
+
+
+  renderHistory();
+
+}
+
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+function renderHistory(){
+
+  const history=
+    JSON.parse(
+      localStorage.getItem(
+        "earthHistory"
+      )||"[]"
+    );
+
+
+  if(!history.length){
+
+    $("historyList").innerHTML=
+      `<p style="color:var(--muted)">
+        No investigations yet.
+      </p>`;
+
+    return;
+
+  }
+
+
+  $("historyList").innerHTML=
+    history.map(x=>`
+
+      <div class="history-item">
+
+        <strong>
+          Case #${String(x.caseNumber).padStart(3,"0")}
+          — ${escapeHTML(x.title)}
+        </strong>
+
+        <small>
+          ${x.date}
+          · ${x.score} points
+          · ${x.observations} observations
+        </small>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+renderHistory();
+
+
+/* =========================================================
+   NEW CASE
+   ========================================================= */
+
+$("newCase").addEventListener("click",()=>{
+
+  showScreen("home");
+
+});
+
+
+/* =========================================================
+   END
+   ========================================================= */
+
+$("end").addEventListener("click",()=>{
+
+  if(
+    confirm("End this investigation?")
+  ){
+
+    finish();
+
+  }
+
+});
+
+
+/* =========================================================
+   LOCAL OPEN-WEIGHT AI
+   OLLAMA
+   ========================================================= */
+
+async function askAI(prompt){
+
+  const url=
+    $("ollamaUrl").value.trim();
+
+  const model=
+    $("model").value.trim();
+
+
+  try{
+
+    const response=
+      await fetch(
+        url+"/api/generate",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            model:model,
+
+            prompt:prompt,
+
+            stream:false
+
+          })
+
+        }
+      );
+
+
+    if(!response.ok)
+      return null;
+
+
+    const data=
+      await response.json();
+
+
+    if(!data.response)
+      return null;
+
+
+    $("statusText").textContent=
+      "Local AI connected";
+
+    $("aiStatus").textContent=
+      "✓ Ollama connected — "+
+      model;
+
+
+    return data.response.trim();
+
+  }
+
+  catch(error){
+
+    $("statusText").textContent=
+      "Offline-first";
+
+    $("aiStatus").textContent=
+      "Built-in mode active — Ollama not detected.";
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   AI MISSION GENERATOR
+   ========================================================= */
+
+async function generateMissionWithAI(){
+
+  const prompt=`
+
+You are the game master for an outdoor game called Earth Detective.
+
+Create a safe outdoor investigation.
+
+Theme: ${state.theme}
+Time available: ${state.time} minutes
+Difficulty: ${state.difficulty}
+Environment: ${state.environment}
+
+The user must physically go outside.
+
+Do not require:
+- dangerous activities
+- entering private property
+- approaching strangers
+- spending money
+- illegal activity
+
+Return ONLY valid JSON:
+
+{
+"title":"short title",
+"description":"short description",
+"clues":[
+{
+"title":"clue title",
+"text":"what the player should investigate",
+"hint":"useful subtle hint"
+},
+{
+"title":"clue title",
+"text":"what the player should investigate",
+"hint":"useful subtle hint"
+},
+{
+"title":"clue title",
+"text":"what the player should investigate",
+"hint":"useful subtle hint"
+},
+{
+"title":"clue title",
+"text":"what the player should investigate",
+"hint":"useful subtle hint"
+},
+{
+"title":"clue title",
+"text":"what the player should investigate",
+"hint":"useful subtle hint"
+}
+]
+}
+`;
+
+
+  const response=
+    await askAI(prompt);
+
+
+  if(!response)
+    return null;
+
+
+  try{
+
+    /*
+      Remove markdown JSON fences if
+      the model returns them.
+    */
+
+    const clean=
+      response
+      .replace(/```json/gi,"")
+      .replace(/```/g,"")
+      .trim();
+
+
+    return JSON.parse(clean);
+
+  }
+
+  catch{
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   AI HINT
+   ========================================================= */
+
+async function getAIHint(clue){
+
+  const prompt=`
+
+You are an outdoor investigation assistant.
+
+The player is investigating:
+
+${clue.title}
+
+Mission:
+${clue.text}
+
+Give ONE short hint.
+
+Do not reveal the answer.
+Do not make the player stay on their phone.
+Encourage observation of the real world.
+
+Return only the hint.
+`;
+
+
+  return await askAI(prompt);
+
+}
+
+
+/* =========================================================
+   AI OBSERVATION EVALUATION
+   ========================================================= */
+
+async function evaluateWithAI(clue,observation){
+
+  const prompt=`
+
+You are evaluating an observation
+in an outdoor exploration game.
+
+Clue:
+${clue.title}
+
+Task:
+${clue.text}
+
+Player observation:
+${observation}
+
+Respond in 2 short sentences.
+
+First say whether the observation is relevant.
+
+Second encourage the player to notice
+one additional detail.
+
+Do not be overly critical.
+`;
+
+
+  return await askAI(prompt);
+
+}
+
+
+/* =========================================================
+   AI FINAL REPORT
+   ========================================================= */
+
+async function createAIReport(){
+
+  if(!state.observations.length)
+    return null;
+
+
+  const observations=
+    state.observations
+    .map(
+      x=>x.text
+    )
+    .join("\n");
+
+
+  const prompt=`
+
+You are writing the final field report
+for an outdoor investigation.
+
+Case:
+${state.mission.title}
+
+Theme:
+${state.theme}
+
+Score:
+${state.score}
+
+Observations:
+${observations}
+
+Write a short field report.
+
+Mention:
+1. What the investigator discovered.
+2. One interesting pattern.
+3. One question they could investigate next time.
+
+Maximum 150 words.
+`;
+
+
+  return await askAI(prompt);
+
+}
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+function sleep(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
+````
